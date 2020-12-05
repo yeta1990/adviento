@@ -16,7 +16,8 @@ var valid = 0;
 
 const inputArray = files()
 .then(res => res.split('\r\n\r\n'))
-.then(r => r.map(x=> x.replace(/\r\n/gm,' ')))
+// después de resolverlo me he dado cuenta de que este paso sobraba
+// .then(r => r.map(x=> x.replace(/\r\n/gm,' ')))
 .then(l => l.map(line => line.match(/([a-z]{3}):/gm) ))
 .then(keys => {
     for (var key of keys) {
