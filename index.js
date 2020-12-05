@@ -18,11 +18,27 @@ const inputArray = files().then(res => res.split('\n'))
 
 const fitRequirements = function (passToCheck, min, max, letter) {
     try {
-        var timesMatch = passToCheck.match(new RegExp(letter, 'gm')).length
-        // console.log(timesMatch)
-        if (timesMatch >= min && timesMatch <= max ) return true; else return false;
+
+            var passLetterToLetter = Array.from(passToCheck);
+
+            var coincidences = 0;
+            for (i=0; i<passLetterToLetter.length; i++) {
+              
+                if (passLetterToLetter[i] == letter && (i+1) == min){
+                    coincidences += 1
+                }
+
+                if (passLetterToLetter[i] == letter && (i+1) == max){
+                    coincidences += 1
+                }
+
+            }
+           
+            if (coincidences == 1 ) return true; else return false;
+        
         
     } catch (error) {
+        console.log(error)
         return false;
     }
     
@@ -40,11 +56,12 @@ const run = async function() {
         var letter = password.match(myRe)[3]
         var passToCheck = password.match(myRe)[4]
 
-        console.log("min is " + min + " and max is " + max + " letra " + letter + " passtocheck " + passToCheck + " " + fitRequirements(passToCheck,min,max,letter))
+       // fitRequirements(passToCheck,min,max,letter)
+        console.log("first is " + min + " and second is " + max + " letra " + letter + " passtocheck " + passToCheck + " " + fitRequirements(passToCheck,min,max,letter))
         
-        if (await fitRequirements(passToCheck,min,max,letter)) {
-            numberOfValidPasswords += 1;
-        }
+       if (await fitRequirements(passToCheck,min,max,letter)) {
+        numberOfValidPasswords += 1;
+    }
     }
     console.log("number of valid passwords: " + numberOfValidPasswords)
     })();
