@@ -1,22 +1,10 @@
 
 var fs = require('fs');
 
-
-
-const slopes = 
-[
-    {right: 1, down: 1},
-    {right: 3, down: 1},
-    {right: 5, down: 1},
-    {right: 7, down: 1},
-    {right: 1, down: 2}
-]    
-
 const files = async function() {
     var data;
 try {  
     data = await fs.readFileSync('input.txt', 'utf8');
-    // console.log(data.toString());    
 } catch(e) {
     console.log('Error:', e.stack);
 }
@@ -24,58 +12,18 @@ try {
 return data.toString();
 }
 
-const inputArray = files().then(res => res.split('\r\n'))
+var valid = 0;
 
-const createFullMap = async function(){
-    
-    const partialMap = await inputArray;
-    const widthPartialMap = partialMap[0].length;
-    const heigth = partialMap.length;
-    const desirableWidth = heigth * 7;
-    const timesToExtendPartialMap = Math.ceil(desirableWidth/widthPartialMap);
-
-    const fullMap = partialMap.map( line => {
-        var newLine = '';
-        for (i=0; i<timesToExtendPartialMap; i++){
-            newLine += line
-        }
-        return newLine
-    })
-    return fullMap;
-}
-
-const calculateTrees = async function(right, down) {
-
-    const fullMap = await createFullMap();
-    var positionX = 0;
-    var trees = 0;
-    
-    for (i=0;i<fullMap.length; i += down) {
-        if (fullMap[i].charAt(positionX) == '#') {
-            trees += 1;
-         }
-        positionX += right
-
+const inputArray = files()
+.then(res => res.split('\r\n\r\n'))
+.then(r => r.map(x=> x.replace(/\r\n/gm,' ')))
+.then(l => l.map(line => line.match(/([a-z]{3}):/gm) ))
+.then(keys => {
+    for (var key of keys) {
+        if ((key.length === 8 ) || (key.length === 7 && !key.includes('cid:'))) valid++ 
     }
+    return valid
+})
+.then(p=>console.log(p + ' valid passports'))
 
-    console.log(trees + ' árboles')
-    return trees;
 
-}
-
-const getProductOfTrees = async function (slopes) {
-    var product = 0;
-    for (const slope of slopes ) {
-        const calculatedTrees = await calculateTrees(slope.right, slope.down);
-        if (product === 0) {
-            product = calculatedTrees;
-        }else{
-            product *= calculatedTrees;
-        }
-        
-    }
-    console.log('producto es ' + product)
-   
-}
-
-getProductOfTrees(slopes);
