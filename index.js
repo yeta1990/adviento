@@ -1,4 +1,3 @@
-
 var fs = require('fs');
 
 const files = async function() {
@@ -14,17 +13,41 @@ return data.toString();
 
 var valid = 0;
 
+const parsers = {
+    byr: /byr:(19[2-9][0-9])|(200[0-2])\b/,
+    iyr: /iyr:(201[0-9])|(2020)\b/,
+    eyr: /eyr:(202[0-9])|(2030)\b/,
+    hgt: /hgt:(1[5-8][0-9]cm)|(19[0-3]cm)|(59in)|(6[0-9]in)|(7[0-6]in)\b/,
+    hcl: /hcl:#(([0-9a-f]){6})\b/,
+    ecl: /ecl:(amb|blu|brn|gry|grn|hzl|oth)\b/,
+    pid: /pid:([0-9]{9})\b/
+}
+
 const inputArray = files()
 .then(res => res.split('\r\n\r\n'))
-// después de resolverlo me he dado cuenta de que este paso sobraba
-// .then(r => r.map(x=> x.replace(/\r\n/gm,' ')))
-.then(l => l.map(line => line.match(/([a-z]{3}):/gm) ))
-.then(keys => {
-    for (var key of keys) {
-        if ((key.length === 8 ) || (key.length === 7 && !key.includes('cid:'))) valid++ 
+
+.then(l => l.map(line => {
+    var pass = {}
+    
+    try {
+    
+        for (const key of Object.keys(parsers)){
+            pass[key] = line.match(parsers[key])[1]
+            
+        }
+
+    valid +=1;
+    return pass;
+       
+    } catch (error) {
+        console.log(line)
+        
+       
+        return null;
     }
-    return valid
-})
-.then(p=>console.log(p + ' valid passports'))
+
+    
+}).filter(w => w != null))
+.then(p=>console.log(p.length + ' valid passports ' + valid))
 
 
