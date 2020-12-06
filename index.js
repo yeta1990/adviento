@@ -15,7 +15,6 @@ try {
 return data.toString();
 }
 
-const inputData = files()
 
 const getUniqueAnswers = function(str){
   var setOfAnswers = new Set();
@@ -34,9 +33,9 @@ const countValues = function(grSet){
 
 }
 
-const getAllPassengers = files()
+const run = files()
 .then(res => res
-  .split('\n\n')
+  .split('\r\n\r\n')
   .map(group=>countValues(group.replace(/\r\n|\n|\r/gm,''))
   ))
 
