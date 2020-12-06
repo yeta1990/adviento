@@ -5,7 +5,7 @@ var counts = 0;
 const files = async function() {
     var data;
 try {  
-    data = await fs.readFileSync('input4.txt', 'utf8');
+    data = await fs.readFileSync('input.txt', 'utf8');
 } catch(e) {
     console.log('Error:', e.stack);
 }
