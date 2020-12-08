@@ -17,7 +17,6 @@ const createMainBags = function (input) {
 
   var allBags = []
   input.map(line=> {
-  
     var key = line.match(/\w*\s\w*/)[0]
     var mainBag = {bag: key, contains: []}
     var re = /(\d)\s(\w*\s\w*)?/gm;
