@@ -10,73 +10,43 @@ try {
     console.log('Error:', e.stack);
 }
 
-return data.toString();
+return data.toString().split('\n');
 }
 
-const createMainBags = function (input) {
-
-  var allBags = []
-  input.map(line=> {
-    var key = line.match(/\w*\s\w*/)[0]
-    var mainBag = {bag: key, contains: []}
-    var re = /(\d)\s(\w*\s\w*)?/gm;
-
-    try {
-
-      var match; 
-
-      while ((match = re.exec(line)) !== null) {
-      
-        mainBag.contains.push({bag: match[2], stock: parseInt(match[1])})
-      
-      }
-      
-      
-    } catch (error) {
-      
-    }
-   
-    allBags.push(mainBag)
-    
-  })
-
-  return allBags;
-}
-
-var results = 0;
-
-const searchContainers = function(bags, objective, stock){
-  
-  const allbags = bags;
- 
-  allbags.forEach(element => {
-    if(element.bag == objective){
-      
-      try {
-        element.contains.forEach(singleBag => {
-          var toSum = singleBag.stock*stock;
-          if (toSum != 0){
-            results += toSum;
-          } else {
-            toSum = singleBag.stock;
-            results += singleBag.stock;
-          }         
-          searchContainers(allbags, singleBag.bag, toSum)
-        })
-       
-      } catch (error) {
-        
-      }
-    
-      return ;
-    }
-  });
-
-}
 
 const run = files()
-.then(res => createMainBags(res.split('\n')))
-.then(mainBags => searchContainers(mainBags, 'shiny gold', 0))
-.then(p=>console.log('shiny gold puede contener en un total de  ' + results + ' bags distintos'))
+.then(res => res.map(i => {
+
+  var instruction = [];
+  instruction.push(i.substr(0,3))
+  instruction.push(parseInt(i.substr(4,i.length)))
+  return instruction;
+}))
+.then(instructions => {
+  console.log(instructions)
+  var position = 0;
+  var alreadyUsed = new Set();
+  var points = 0;
+  function interpreter(position) {
+    if (alreadyUsed.has(position)) return points;
+    if (instructions[position][0] == "nop"){
+      //points += instructions[position][1]
+      alreadyUsed.add(position)
+      return interpreter(position+1)
+    }else if (instructions[position][0] == "acc"){
+      points += instructions[position][1]
+      alreadyUsed.add(position)
+      return interpreter(position+1)
+    }
+    else{
+      alreadyUsed.add(position)
+      return interpreter(position+instructions[position][1])
+    }
+  }
+  interpreter(position)
+  return points;
+})
+.then(p=> console.log("acumulador :" + p))
+
 
 
