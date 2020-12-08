@@ -1,6 +1,5 @@
 
 var fs = require('fs');
-const { get } = require('http');
 
 
 const files = async function() {
