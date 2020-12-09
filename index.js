@@ -14,13 +14,16 @@ const calc = function(expenses) {
 
   const exp = expenses.map(ex => parseInt(ex));
   console.log(exp)
-  exp.map(line => exp.map(f=> {
-
-    if ((f+line) == 2020){
-      console.log(f*line)
-      
-    }}
-  ))
+  exp.map(line => {
+    
+    exp.map(f=> {
+        exp.map (g => {if ((f+line+g) == 2020){
+          console.log(f*line*g)
+        } })
+    }
+  )
+}
+  )
 }
 
 const run = files().then(expenses => calc(expenses)
