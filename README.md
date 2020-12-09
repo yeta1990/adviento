@@ -42,3 +42,8 @@ day 7.2: https://github.com/yeta1990/adviento/tree/7.2
 day 8.1: https://github.com/yeta1990/adviento/tree/8.1
 
 day 8.2: https://github.com/yeta1990/adviento/tree/8.2
+
+
+day 9.1: https://github.com/yeta1990/adviento/tree/9.1
+
+day 9.2: https://github.com/yeta1990/adviento/tree/9.2
