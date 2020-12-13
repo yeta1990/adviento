@@ -12,66 +12,35 @@ try {
 return data.toString().split('\n');
 }
 
-const calc = function(xmas) {
+var oneJolt = 0;
+var threeJolts = 1;
 
-  const exp = xmas.map(ex => parseInt(ex));
+
+const order = function(adapters) {
+  return adapters.sort(function(a, b) {
+    return a - b;
+  });
   
-  var invalid = 0;
-  //dance:
-  for (i=0; i<exp.length; i++){
+}
 
-    const subset = exp.slice(i, i+26)
-    var found = false;
-
-    for (j=0; j<25;j++){
-
-      for (h=0; h<25;h++){
-        if (subset[j] + subset[h] == subset[25]) {
-          
-          found = true
-          break //dance;
-        };
-      }
-
+const calculate = function(orderedAdapters){
+  var lastAdapter = 0;
+  orderedAdapters.forEach(adapter => {
+    switch (adapter - lastAdapter)  {
+      case 1:
+        lastAdapter = adapter;
+        oneJolt++;
+        break;
+      case 3:
+        lastAdapter = adapter;
+        threeJolts++;
+        break;
+      default:
+        break;
     }
-    if (!found) {console.log('9.1: ' + subset[25]); invalid = subset[25]; break; };
-  }
   
-  console.timeEnd("time")
-  return {invalid, exp};
+  });
+
 }
 
-const findContiguous = function(exp, invalid){
-  console.time("time 2")
-
-  dance:
-  for(i=0; i<exp.length;i++) {
-    
-    var found = false;
-    
-      for (h=0; h<25;h++){
-       
-        const reducer = (accumulator, currentValue) => accumulator + currentValue;
-        
-        try {
-          if (exp.slice(i, (i+h+1)).reduce(reducer) == invalid){
-            found = true;
-            var combination = [...exp.slice(i, (i+h+1))];
-         
-            console.log('9.2: ' + (Math.min(...combination) + Math.max(...combination)));
-            if (found) break dance;
-            
-          }
-        } catch (error) {
-          
-        }
-         
-      }
-    
-     
-  }
-  console.timeEnd("time 2")
-}
-
-
-const run = files().then(xmas => calc(xmas)).then(p => findContiguous(p.exp, p.invalid))
+const run = files().then(adapters => order(adapters)).then(orderedAdapters => calculate(orderedAdapters)).then(a => console.log('result: ' + oneJolt*threeJolts))
